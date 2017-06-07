@@ -1,6 +1,6 @@
 {
   "name": "test-jenkins",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "dependencies": {
     "angular2": "2.0.0-alpha.34",
     "es6-module-loader": "^0.15.0",
