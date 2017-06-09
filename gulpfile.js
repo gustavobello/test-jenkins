@@ -424,6 +424,7 @@ var bump = require('gulp-bump');
 var filter = require('gulp-filter');
 var tag_version = require('gulp-tag-version');
 var argv = require('yargs').argv;
+var runSequence = require('run-sequence');
 
 
 // version bumping
@@ -434,7 +435,7 @@ function bumpVersion(importance) {
         .pipe(gulp.dest('./'))
         .pipe(git.commit('bumps package version'))
         .pipe(filter('package.json'))
-        .pipe(tag_version({cwd: './dist'}));
+        .pipe(tag_version());
 }
 
 gulp.task('version', function() {
@@ -455,23 +456,13 @@ gulp.task('version', function() {
 
  
 gulp.task('patch', function() { return bumpVersion('patch'); })
-gulp.task('minor', function() {  
-    return bumpVersion('minor')
-    .pipe(function () { console.log('oi') });
+gulp.task('minor', function() {  return bumpVersion('minor'); })
 
-    //git.push('origin', ['master'], {args: " --tags"})
-
-});
-
-
-
-
-gulp.task('push', function(){
-  git.push('origin', ['master'], {args: " --tags"}, function (err) {
-    if (err) throw err;
+gulp.task('bump', function() {
+  runSequence('minor', function () {
+    git.push('origin', ['master'], {args: " --tags"});
   });
 });
-
 
 gulp.task('release', function() { return bumpVersion('major'); })
 // Default Task
