@@ -460,7 +460,13 @@ gulp.task('minor', function() {  return bumpVersion('minor'); })
 
 gulp.task('bump', function() {
   runSequence('minor', function () {
-    git.push('origin', ['master'], {args: " --tags"});
+    git.push('origin', ['master'], {args: " --tags"}, function (err) {
+        if (err) {
+            console.log('error pushing changes');
+            console.log(err);
+            throw err;
+        }
+    });
   });
 });
 
